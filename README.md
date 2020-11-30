@@ -1,4 +1,4 @@
-** rebert model codes based on fariseq **
+#rebert model codes based on fariseq#
 
 --------------------------------------------------------------------------------
 1.simple codes for integrate huggingface's Chinese bert into fairseq.
