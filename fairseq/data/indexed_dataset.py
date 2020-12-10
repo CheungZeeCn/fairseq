@@ -7,6 +7,7 @@ import shutil
 import struct
 from functools import lru_cache
 
+import os
 import numpy as np
 import torch
 from fairseq.dataclass.constants import DATASET_IMPL_CHOICES
@@ -60,7 +61,9 @@ def make_dataset(path, impl, fix_lua_indexing=False, dictionary=None):
     if impl == "raw" and IndexedRawTextDataset.exists(path):
         assert dictionary is not None
         return IndexedRawTextDataset(path, dictionary)
-    elif impl == "lazy" and IndexedDataset.exists(path):
+    elif impl == 'raw_str' and IndexedRawStrTextDataset.exists(path):
+        return IndexedRawStrTextDataset(path)
+    elif impl == 'lazy' and IndexedDataset.exists(path):
         return IndexedDataset(path, fix_lua_indexing=fix_lua_indexing)
     elif impl == "cached" and IndexedDataset.exists(path):
         return IndexedCachedDataset(path, fix_lua_indexing=fix_lua_indexing)
@@ -237,6 +240,60 @@ class IndexedCachedDataset(IndexedDataset):
         if self.fix_lua_indexing:
             item -= 1  # subtract 1 for 0-based indexing
         return item
+
+
+class IndexedRawStrTextDataset(FairseqDataset):
+    """Takes a text file as input and binarizes it in memory at instantiation.
+    Original lines are also kept in memory"""
+
+    def __init__(self, path):
+        self.tokens_list = []
+        self.lines = []
+        self.sizes = []
+        self.read_data(path)
+        self.size = len(self.tokens_list)
+
+    def read_data(self, path):
+        with open(path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip("\n")
+                self.lines.append(line)
+                #tokens = dictionary.encode_line(
+                #    line, add_if_not_exist=False,
+                #    append_eos=self.append_eos, reverse_order=self.reverse_order,
+                #).long()
+                self.tokens_list.append(line)
+                self.sizes.append(len(line))
+        self.sizes = np.array(self.sizes)
+
+    def check_index(self, i):
+        if i < 0 or i >= self.size:
+            raise IndexError('index out of range')
+
+    @lru_cache(maxsize=8)
+    def __getitem__(self, i):
+        self.check_index(i)
+        return self.tokens_list[i]
+
+    def get_original_text(self, i):
+        self.check_index(i)
+        return self.lines[i]
+
+    def __del__(self):
+        pass
+
+    def __len__(self):
+        return self.size
+
+    def num_tokens(self, index):
+        return self.sizes[index]
+
+    def size(self, index):
+        return self.sizes[index]
+
+    @staticmethod
+    def exists(path):
+        return os.path.exists(path)
 
 
 class IndexedRawTextDataset(FairseqDataset):

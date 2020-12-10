@@ -36,7 +36,7 @@ def ChoiceEnum(choices: List[str]):
 
 LOG_FORMAT_CHOICES = ChoiceEnum(["json", "none", "simple", "tqdm"])
 DDP_BACKEND_CHOICES = ChoiceEnum(["c10d", "no_c10d"])
-DATASET_IMPL_CHOICES = ChoiceEnum(["raw", "lazy", "cached", "mmap", "fasta"])
+DATASET_IMPL_CHOICES = ChoiceEnum(["raw", "lazy", "cached", "mmap", "fasta", "raw_str"])
 DISTRIBUTED_WRAPPER_CHOICES = ChoiceEnum(["DDP", "SlowMo"])
 GENERATION_CONSTRAINTS_CHOICES = ChoiceEnum(["ordered", "unordered"])
 GENERATION_DECODING_FORMAT_CHOICES = ChoiceEnum(

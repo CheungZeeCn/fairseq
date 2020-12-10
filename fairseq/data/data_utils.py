@@ -64,9 +64,33 @@ def collate_tokens(
     return res
 
 
-def load_indexed_dataset(
-    path, dictionary=None, dataset_impl=None, combine=False, default="cached"
-):
+def load_indexed_raw_str_dataset(path):
+    """
+    """
+    import fairseq.data.indexed_dataset as indexed_dataset
+
+    datasets = []
+    for k in itertools.count():
+        path_k = path + (str(k) if k > 0 else '')
+        dataset_impl_k = 'raw_str'
+        dataset = indexed_dataset.make_dataset(
+            path_k,
+            impl=dataset_impl_k,
+        )
+        if dataset is None:
+            break
+        logger.info('loaded {} examples from: {}'.format(len(dataset), path_k))
+        datasets.append(dataset)
+    if len(datasets) == 0:
+        return None
+    elif len(datasets) == 1:
+        return datasets[0]
+    else:
+        raise NotImplementedError("ConcatDataset not supported")
+        #return ConcatDataset(datasets)
+
+
+def load_indexed_dataset(path, dictionary=None, dataset_impl=None, combine=False, default='cached'):
     """A helper function for loading indexed datasets.
 
     Args:

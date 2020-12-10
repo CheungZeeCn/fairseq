@@ -5,6 +5,7 @@
 """isort:skip_file"""
 
 from .dictionary import Dictionary, TruncatedDictionary
+from .tokenizer_dictionary import TokenizerDictionary
 
 from .fairseq_dataset import FairseqDataset, FairseqIterableDataset
 
@@ -14,6 +15,7 @@ from .add_target_dataset import AddTargetDataset
 from .append_token_dataset import AppendTokenDataset
 from .audio.raw_audio_dataset import FileAudioDataset
 from .backtranslation_dataset import BacktranslationDataset
+from .bert_tokenizer_dataset import BertTokenizerDataset
 from .bucket_pad_length_dataset import BucketPadLengthDataset
 from .colorize_dataset import ColorizeDataset
 from .concat_dataset import ConcatDataset
@@ -69,6 +71,7 @@ __all__ = [
     "AppendTokenDataset",
     "BacktranslationDataset",
     "BaseWrapperDataset",
+    "BertTokenizerDataset",
     "BucketPadLengthDataset",
     "ColorizeDataset",
     "ConcatDataset",
@@ -117,6 +120,7 @@ __all__ = [
     "StripTokenDataset",
     "SubsampleDataset",
     "TokenBlockDataset",
+    "TokenizerDictionary",
     "TransformEosDataset",
     "TransformEosLangPairDataset",
     "TruncateDataset",
