@@ -2,6 +2,7 @@
 
 --------------------------------------------------------------------------------
 
+1. It's far from perfect but get works done.
 1. Important files:
     * fairseq/data/tokenizer_dictionary.py      # dictionary that wrapping bert's tokenizer
     * fairseq/data/__init__.py                  # registers TokenizerDictionary, BertTokenizerDataset 
