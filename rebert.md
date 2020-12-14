@@ -12,7 +12,7 @@
 
 ![2](https://github.com/CheungZeeCn/fairseq/raw/master/docs/rebert2.png)
 
-整个框架和思路参考了 levenshtein transformer， 感觉挺有意思的一个东西，所以也就基于fairseq进行了后续开发，索然fairseq 还不算成熟
+整个框架和思路参考了 levenshtein transformer， 感觉挺有意思的一个东西，源码基于fairseq发布， 所以我们也就基于fairseq进行了后续开发，虽然fairseq 还不算成熟
 
 ![3](https://github.com/CheungZeeCn/fairseq/raw/master/docs/rebert3.png)
 
