@@ -53,7 +53,7 @@
       1. todo: --share-bert 目前默认share-bert 不share 的情况还没有实现
    1. 训练模式
       1. --dual-policy-ratio 多大的概率使用dual policy 来训练（也就是训练delete的时候，基于之前insert的结果，如果insert错了，delete可以指出来） 
-      1. —-middle-ratio 多大的概率用 middle target/source 来引导训练；这个middle 是做数据处理的时候用difflib来生成的，相当于理想情况下删除了source 串中错误
+      1. --middle-mode-ratio 多大的概率用 middle target/source 来引导训练；这个middle 是做数据处理的时候用difflib来生成的，相当于理想情况下删除了source 串中错误
       字符后的字符串，针对删除操作，这就是golden label， 针对插入操作，也是作为一个prev_token 来有针对性的训插入任务。
 1. 怎么训练
    1. 样例数据集，空间所限，放了个比较难的任务但是train/valid/test 是一样的数据集做实验
@@ -61,7 +61,7 @@
    1. 输入
    ```bash
     $ cd [FAIRSEQ_DIR] && mkdir -p  outputs/CGEC_debug_2.pinyinoff.20201214
-    $ CUDA_VISIBLE_DEVICES=0  fairseq-train     datasets/CGEC_NLPCC_2018_sample/  --save-dir  outputs/CGEC_debug_2.pinyinoff.20201214  --ddp-backend=no_c10d     --task rebert     --criterion refinement_nat_loss    --arch  levenshtein_refinement_rebert_decoder_2layers   --noise random_delete  --optimizer adam --adam-betas '(0.9,0.98)'     --lr '1e-04' --lr-scheduler inverse_sqrt     --min-lr '1e-07' --warmup-updates 10000     --warmup-init-lr '1e-06' --label-smoothing 0.1     --dropout 0.1 --weight-decay 0.01    --log-format 'simple' --log-interval 100    --save-interval-updates 10000   --max-update 2000000  --dataset-impl raw_str    --load-hf-bert-from models/bert-base-chinese/  --batch-size 6   --early-exit=2,2,2  --load-source-middle  --seed 6  --fix-bert-params  2>&1   | tee  -a   outputs/CGEC_debug_2.pinyinoff.20201214/log.log
+    $ CUDA_VISIBLE_DEVICES=0  fairseq-train     datasets/CGEC_NLPCC_2018_sample/  --save-dir  outputs/CGEC_debug_2.pinyinoff.20201214  --ddp-backend=no_c10d     --task rebert     --criterion refinement_nat_loss    --arch  levenshtein_refinement_rebert_decoder_2layers   --noise random_delete  --optimizer adam --adam-betas '(0.9,0.98)'     --lr '1e-04' --lr-scheduler inverse_sqrt     --min-lr '1e-07' --warmup-updates 10000     --warmup-init-lr '1e-06' --label-smoothing 0.1     --dropout 0.1 --weight-decay 0.01    --log-format 'simple' --log-interval 100    --save-interval-updates 10000   --max-update 2000000  --dataset-impl raw_str    --load-hf-bert-from models/bert-base-chinese/  --batch-size 6   --early-exit=2,2,2  --load-source-middle  --seed 6 --dual-policy-ratio 0 --middle-mode-ratio 1 --fix-bert-params  2>&1   | tee  -a   outputs/CGEC_debug_2.pinyinoff.20201214/log.log
     ```   
 
 1. Important files:
