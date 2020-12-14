@@ -6,7 +6,7 @@
 
 ### 思路 ###
 
-![1](https://github.com/CheungZeeCn/fairseq/raw/master/docs/rebert1.jpg)
+![1](https://github.com/CheungZeeCn/fairseq/raw/master/docs/rebert12.png)
 
 初始的想法比较简单，所以就开始做了
 
