@@ -10,6 +10,7 @@ from fairseq.models.transformer import (
     TransformerDecoder,
     TransformerEncoder,
     TransformerModel,
+    ReBertPlusDecoder,
 )
 from fairseq.modules.transformer_sentence_encoder import init_bert_params
 
@@ -167,4 +168,10 @@ class FairseqNATEncoder(TransformerEncoder):
 class FairseqNATDecoder(TransformerDecoder):
     def __init__(self, args, dictionary, embed_tokens, no_encoder_attn=False):
         super().__init__(args, dictionary, embed_tokens, no_encoder_attn)
+        self.ensemble_models = None
+
+
+class FairseqNATReBertPlusDecoder(ReBertPlusDecoder):
+    def __init__(self, args, dictionary, encoder, no_encoder_attn=False):
+        super().__init__(args, dictionary, encoder, no_encoder_attn)
         self.ensemble_models = None

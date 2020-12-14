@@ -79,6 +79,8 @@ def make_dataset(path, impl, fix_lua_indexing=False, dictionary=None):
 def dataset_exists(path, impl):
     if impl == "raw":
         return IndexedRawTextDataset.exists(path)
+    elif impl == 'raw_str':
+        return IndexedRawStrTextDataset.exists(path)
     elif impl == "mmap":
         return MMapIndexedDataset.exists(path)
     else:

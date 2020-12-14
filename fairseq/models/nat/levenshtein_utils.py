@@ -33,6 +33,34 @@ def load_libnat():
             raise e
 
 
+def _get_del_target_by_middle(in_tokens, out_tokens, padding_idx):
+    """
+
+    :param in_tokens:  in_tokens 对应 src_mid
+    :param out_tokens:  out_tokens 对应 原始输入
+    :param padding_idx:
+    :return:
+    """
+    libnat, use_cuda = load_libnat()
+
+    def _get_del_targets_cuda_by_middle(in_tokens, out_tokens, padding_idx):
+        in_masks = in_tokens.ne(padding_idx)
+        out_masks = out_tokens.ne(padding_idx)
+        mask_ins_targets, masked_tgt_masks = libnat.generate_insertion_labels(
+            out_tokens.int(), libnat.levenshtein_distance(
+                in_tokens.int(), out_tokens.int(),
+                in_masks.sum(1).int(), out_masks.sum(1).int()
+            )
+        )
+        word_del_targets = masked_tgt_masks.type_as(out_tokens).masked_fill_(~out_masks, 0)
+        return word_del_targets
+
+    if use_cuda:
+        return _get_del_targets_cuda_by_middle(in_tokens, out_tokens, padding_idx)
+    else:
+        raise NotImplementedError("CPU not supported yet")
+
+
 def _get_ins_targets(in_tokens, out_tokens, padding_idx, unk_idx):
     libnat, use_cuda = load_libnat()
 
